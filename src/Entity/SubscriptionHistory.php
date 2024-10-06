@@ -13,46 +13,23 @@ class SubscriptionHistory
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'subscriptionHistories')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $subscriber = null;
-
-    #[ORM\ManyToOne(inversedBy: 'subscriptionHistories')]
-    private ?Subscription $subscribtion = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $endAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'subscriptionHistories')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $subscriber = null;
+
+    #[ORM\ManyToOne(inversedBy: 'subscriptionHistories')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Subscription $subscription = null;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getSubscriber(): ?User
-    {
-        return $this->subscriber;
-    }
-
-    public function setSubscriber(?User $subscriber): static
-    {
-        $this->subscriber = $subscriber;
-
-        return $this;
-    }
-
-    public function getSubscribtion(): ?Subscription
-    {
-        return $this->subscribtion;
-    }
-
-    public function setSubscribtion(?Subscription $subscribtion): static
-    {
-        $this->subscribtion = $subscribtion;
-
-        return $this;
     }
 
     public function getStartAt(): ?\DateTimeImmutable
@@ -75,6 +52,30 @@ class SubscriptionHistory
     public function setEndAt(\DateTimeImmutable $endAt): static
     {
         $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    public function getSubscriber(): ?User
+    {
+        return $this->subscriber;
+    }
+
+    public function setSubscriber(?User $subscriber): static
+    {
+        $this->subscriber = $subscriber;
+
+        return $this;
+    }
+
+    public function getSubscription(): ?Subscription
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(?Subscription $subscription): static
+    {
+        $this->subscription = $subscription;
 
         return $this;
     }

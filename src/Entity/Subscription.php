@@ -22,16 +22,23 @@ class Subscription
     private ?int $price = null;
 
     #[ORM\Column]
-    private ?int $durationInMounths = null;
+    private ?int $duration = null;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'currentSubscription')]
+    private Collection $users;
 
     /**
      * @var Collection<int, SubscriptionHistory>
      */
-    #[ORM\OneToMany(targetEntity: SubscriptionHistory::class, mappedBy: 'subscribtion')]
+    #[ORM\OneToMany(targetEntity: SubscriptionHistory::class, mappedBy: 'subscription')]
     private Collection $subscriptionHistories;
 
     public function __construct()
     {
+        $this->users = new ArrayCollection();
         $this->subscriptionHistories = new ArrayCollection();
     }
 
@@ -64,14 +71,44 @@ class Subscription
         return $this;
     }
 
-    public function getDurationInMounths(): ?int
+    public function getDuration(): ?int
     {
-        return $this->durationInMounths;
+        return $this->duration;
     }
 
-    public function setDurationInMounths(int $durationInMounths): static
+    public function setDuration(int $duration): static
     {
-        $this->durationInMounths = $durationInMounths;
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setCurrentSubscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getCurrentSubscription() === $this) {
+                $user->setCurrentSubscription(null);
+            }
+        }
 
         return $this;
     }
@@ -88,7 +125,7 @@ class Subscription
     {
         if (!$this->subscriptionHistories->contains($subscriptionHistory)) {
             $this->subscriptionHistories->add($subscriptionHistory);
-            $subscriptionHistory->setSubscribtion($this);
+            $subscriptionHistory->setSubscription($this);
         }
 
         return $this;
@@ -98,8 +135,8 @@ class Subscription
     {
         if ($this->subscriptionHistories->removeElement($subscriptionHistory)) {
             // set the owning side to null (unless already changed)
-            if ($subscriptionHistory->getSubscribtion() === $this) {
-                $subscriptionHistory->setSubscribtion(null);
+            if ($subscriptionHistory->getSubscription() === $this) {
+                $subscriptionHistory->setSubscription(null);
             }
         }
 
