@@ -309,4 +309,9 @@ class Media
 
         return $this;
     }
+
+    public function getType(): MediaTypeEnum
+    {
+        return 'media';
+    }
 }
