@@ -33,7 +33,7 @@ class Comment
     private Collection $childComments;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $publisher = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
