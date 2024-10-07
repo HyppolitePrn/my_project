@@ -55,8 +55,4 @@ class Serie extends Media
         return $this;
     }
 
-    public function getType(): string
-    {
-        return 'serie';
-    }
 }
